@@ -33,7 +33,7 @@ public class serverController {
 	
 		
 		
-	// handler method to handle list students and return mode and view
+	// handler method to handle list servers and return mode and view
 	@GetMapping("/servers")
 	public String listServers(Model model) {
 		model.addAttribute("sts", serverService.getAllServers());
@@ -43,7 +43,7 @@ public class serverController {
 	@GetMapping("/servers/new")
 	public String createServerForm(Model model) {
 		
-		// create student object to hold student form data
+		// create servers object to hold student form data
 		Server server = new Server();
 		model.addAttribute("st", server);
 		return "create_servers";
@@ -67,19 +67,19 @@ public class serverController {
 			@ModelAttribute("server") Server server,
 			Model model) {
 		
-		// get student from database by id
+		// get server from database by id
 		Server existingServer = serverService.getServerByName(id);
 		existingServer.setId(server.getId());
 		existingServer.setServerName(server.getServerName());
 		existingServer.setLanguage(server.getLanguage());
 		existingServer.setFramework(server.getFramework());
 		
-		// save updated student object
+		// save updated server object
 		serverService.updateServer(existingServer);
 		return "redirect:/servers";		
 	}
 	
-	// handler method to handle delete student request
+	// handler method to handle delete server request
 	@GetMapping("/servers/{name}")
 	public String listServersbyid(@PathVariable String name,Model model) {
 		model.addAttribute("sts", serverService.getServerByName(name));
