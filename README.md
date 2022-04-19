@@ -46,7 +46,9 @@ else
 docker run -it --rm --name maven -v /root/restapi:/usr/src/mymaven -w /usr/src/mymaven maven:3.3-jdk-8 mvn package
 fi
 ```
-### Used Maven Docker image to directly build the project .jar file.
+* Mounting the source code dir to maven image to build 'mvn package' and give .jar file as output.
+
+### Used Maven Docker image to directly build the project .jar file. 
 
 ![image](https://user-images.githubusercontent.com/64476159/164054044-b41cf471-3cc8-44ed-a994-1a5a37fbcb55.png)
 
@@ -59,8 +61,7 @@ else
 sudo docker build -t app /root/restapi/
 fi
 ```
-* This Job will create a Dockerfile for the RestApi deployment. 
-* Can use pre-built app from Docker Repo 'furqano/restapi-app' image to avoid job-2.
+* This Job will create a Dockerfile with the new .jar file created by Maven build for the RestApi deployment.  
 
 ![image](https://user-images.githubusercontent.com/64476159/164054520-e306d295-aa42-4daf-91ad-eba1c706b871.png)
 ![image](https://user-images.githubusercontent.com/64476159/164054575-6e6c96cd-3150-428f-a34d-af6dd05b5348.png)
