@@ -59,7 +59,9 @@ else
 sudo docker build -t app /root/restapi/
 fi
 ```
-This Job will create a Dockerfile for the RestApi deployment. Can use pre-built app from Docker Repo 'furqano/restapi-app' image to avoid job-2.
+* This Job will create a Dockerfile for the RestApi deployment. 
+* Can use pre-built app from Docker Repo 'furqano/restapi-app' image to avoid job-2.
+
 ![image](https://user-images.githubusercontent.com/64476159/164054520-e306d295-aa42-4daf-91ad-eba1c706b871.png)
 ![image](https://user-images.githubusercontent.com/64476159/164054575-6e6c96cd-3150-428f-a34d-af6dd05b5348.png)
 
