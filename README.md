@@ -64,7 +64,7 @@ fi
 * This Job will create a Dockerfile with the new .jar file created by Maven build for the RestApi deployment.  
 
 ![image](https://user-images.githubusercontent.com/64476159/164054520-e306d295-aa42-4daf-91ad-eba1c706b871.png)
-![image](https://user-images.githubusercontent.com/64476159/164054575-6e6c96cd-3150-428f-a34d-af6dd05b5348.png)
+
 
 ## job 3 -  launch mongodb
 ```
