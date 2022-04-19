@@ -26,12 +26,14 @@ git push
 ```
 Note : The .git/hooks/post-commit is global for the working repository no need of creating it for every branch . 
  
-# CREATING THE GIT-WEBHOOKS
+## Creating GIT-WebHooks
  
  ```
  repository setting -> webhooks -> add webhook -> paste the <url/github-webhook/>
  ```
  
+Once there is a commit in the repo the Job will atomatically trigger.
+
 ## job 1 -  To download the code from repo and create jar file using mvn 
 ```
 sudo cp * /root/restapi    #copy the project code from workspace to project folder
@@ -82,7 +84,8 @@ fi
 ```
 ![image](https://user-images.githubusercontent.com/64476159/164054857-4025e747-dee7-49a1-9a0d-971a739dfda9.png)
 
-## job 5 - Print the IP address of the Docker Instance
+## job 5 - Print the IP address of the Docker Instance 
+Used Docker Inspect to get the IP and print can be integrated with emailer to get the detailed pipeline build details.
 ```
 sudo docker container inspect -f '{{ .NetworkSettings.IPAddress }}' app
 ```
