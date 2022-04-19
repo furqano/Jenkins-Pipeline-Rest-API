@@ -69,7 +69,7 @@ fi
 ```
 if sudo docker ps -a | grep mongo
 then
-sudo docker rm -f mongo
+echo "image exists"
 else
 sudo docker run -d -p 27017:27017 --name mongo mongo
 fi
