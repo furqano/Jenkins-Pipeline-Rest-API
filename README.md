@@ -56,7 +56,7 @@ fi
 ```
 if sudo docker images | grep app
 then
-echo "Img already exists"
+sudo docker rmi app
 else
 sudo docker build -t app /root/restapi/
 fi
