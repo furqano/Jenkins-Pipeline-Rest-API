@@ -36,10 +36,12 @@ Note : The .git/hooks/post-commit is global for the working repository no need o
 ```
 sudo cp * /root/restapi    #copy the project code from workspace to project folder
 
-sudo mvn package                # to build the target .jar file
-
-sudo cp Dockerfile /target/     # Copying Dockerfile to build and copy .jar file directly
-
+if docker ps -a | grep maven
+then
+sudo docker rm -f maven
+else
+docker run -it --rm --name maven -v /root/restapi:/usr/src/mymaven -w /usr/src/mymaven maven:3.3-jdk-8 mvn package
+fi
 ```
 
 ## job 2 - To create a docker image using dockerfile
