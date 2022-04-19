@@ -6,6 +6,7 @@ An CI/CD Jenkins Pipeline to deploy the Rest API application in containerized en
 
 * Jenkins
 * Docker
+* Git
 
 ## Triggering Jenkins Jobs using Git Hooks.
 
@@ -96,4 +97,4 @@ sudo docker container inspect -f '{{ .NetworkSettings.IPAddress }}' app
 
 ![image](https://user-images.githubusercontent.com/64476159/164056676-4e38746b-8548-43c1-82d2-8ffedf65e1c6.png)
 
-
+For detailed usage of rest api app can check out ![serer](https://github.com/furqano/Java-Rest-API-2-Server)
