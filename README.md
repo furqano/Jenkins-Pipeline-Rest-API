@@ -56,7 +56,7 @@ fi
 ```
 if sudo docker images | grep app
 then
-sudo docker rmi app
+sudo docker rmi -f app
 sudo docker build -t app /root/restapi/
 else
 sudo docker build -t app /root/restapi/
