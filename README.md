@@ -37,13 +37,13 @@ Once there is a commit in the repo the Job will atomatically trigger.
 
 ## job 1 -  To download the code from repo and create jar file using mvn 
 ```
-sudo cp * /root/restapi    #copy the project code from workspace to project folder
-
-if docker ps -a | grep maven
+sudo cp -rvf * /root/restapi   
+if sudo docker ps -a | grep maven
 then
 sudo docker rm -f maven
+sudo docker run -d --rm --name maven -v /root/restapi:/usr/src/mymaven -w /usr/src/mymaven maven:3.3-jdk-8 mvn package
 else
-docker run -it --rm --name maven -v /root/restapi:/usr/src/mymaven -w /usr/src/mymaven maven:3.3-jdk-8 mvn package
+sudo docker run -d --rm --name maven -v /root/restapi:/usr/src/mymaven -w /usr/src/mymaven maven:3.3-jdk-8 mvn package
 fi
 ```
 * Mounting the source code dir to maven image to build 'mvn package' and give .jar file as output.
@@ -57,6 +57,7 @@ fi
 if sudo docker images | grep app
 then
 sudo docker rmi app
+sudo docker build -t app /root/restapi/
 else
 sudo docker build -t app /root/restapi/
 fi
@@ -82,6 +83,7 @@ fi
 if sudo docker ps -a | grep app
 then
 sudo docker rm -f app
+sudo docker run -d -p 6035:6035 --name app app
 else
 sudo docker run -d -p 6035:6035 --name app app
 fi
@@ -99,5 +101,89 @@ sudo docker container inspect -f '{{ .NetworkSettings.IPAddress }}' app
 ## Screenshots
 
 ![image](https://user-images.githubusercontent.com/64476159/164056676-4e38746b-8548-43c1-82d2-8ffedf65e1c6.png)
+![image](https://user-images.githubusercontent.com/64476159/164126882-2c8a4cd8-89a8-4cc7-acb9-e5af3fde002d.png)
+
 
 For detailed usage of rest api app can check out ![rest-api-2-server](https://github.com/furqano/Java-Rest-API-2-Server)
+
+
+## Jenkins-Pipeline-Script
+
+```
+node {
+    try {
+        stage("Prep"){
+             cleanWs()   
+    }
+        stage("Build") {
+            git branch: '**', url: 'https://github.com/furqano/Jenkins-Pipeline-Rest-API.git'
+            sh '''sudo cp -rvf * /root/restapi   
+            if sudo docker ps -a | grep maven
+            then
+            sudo docker rm -f maven
+            sudo docker run -d --rm --name maven -v /root/restapi:/usr/src/mymaven -w /usr/src/mymaven maven:3.3-jdk-8 mvn package
+            else
+            sudo docker run -d --rm --name maven -v /root/restapi:/usr/src/mymaven -w /usr/src/mymaven maven:3.3-jdk-8 mvn package
+            fi'''
+            
+        stage("Dockerbuild")
+        {
+            sh '''if sudo docker images | grep app
+            then
+            sudo docker rmi -f app
+            sudo docker build -t app /root/restapi/
+            else
+            sudo docker build -t app /root/restapi/
+            fi'''
+        }
+        stage("Mongo-Deploy")
+        {
+            sh '''if sudo docker ps -a | grep mongo
+            then
+            echo "image exists"
+            else
+            sudo docker run -d -p 27017:27017 --name mongo mongo
+            fi'''
+        }
+        stage("App Deploy"){
+            sh '''if sudo docker ps -a | grep app
+            then
+            sudo docker rm -f app
+            sudo docker run -d -p 6035:6035 --name app app
+            else
+            sudo docker run -d -p 6035:6035 --name app app
+            fi'''
+        }
+        stage("Notify Users"){
+            sh'''
+            IP=$(sudo docker container inspect -f '{{ .NetworkSettings.IPAddress }}' app )
+            '''
+            emailext(
+        subject: "Job sucess",
+        body: " Your Jenkins Pipeline rest api app sucess.",
+        recipientProviders: [buildUser()],
+        to: 'mohamedfurqan.ocert@gmail.com')
+        }
+    }
+stage("ErrorHandling"){
+    echo 'Begining of error handling'
+}    
+echo 'Job was sucessful'
+}catch(e){
+    echo ' This will run only if failed'
+    throw e
+    emailext(
+        subject: "Job Failed",
+        body: " Your Jenkins Pipeline rest api app failed",
+        recipientProviders: [buildUser()],
+        to: 'mohamedfurqan.ocert@gmail.com')
+}
+}
+}
+
+```
+![image](https://user-images.githubusercontent.com/64476159/164127169-eb1c3539-b319-436d-989c-083fe08ee413.png)
+![image](https://user-images.githubusercontent.com/64476159/164127260-76b328f4-e1a9-4182-8ac3-2e8c13dd2525.png)
+
+
+
